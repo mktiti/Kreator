@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>kreator-api</artifactId>
-    <version>0.1</version>
+    <version>0.1.1</version>
 
     <dependencies>
         <dependency>
@@ -64,7 +64,6 @@
                                 <descriptorRef>jar-with-dependencies</descriptorRef>
                             </descriptorRefs>
                             <finalName>kreator-api</finalName>
-                            <appendAssemblyId>false</appendAssemblyId>
                         </configuration>
                     </execution>
                 </executions>

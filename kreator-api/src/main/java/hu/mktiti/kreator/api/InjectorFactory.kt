@@ -18,7 +18,7 @@ object InjectorFactory {
 
 }
 
-object FailingInjector : Injector {
+private object FailingInjector : Injector {
 
     override fun <T : Any> inject(clazz: KClass<T>, tag: String?): T? = null
 
