@@ -10,7 +10,7 @@ object InjectorFactory {
     val injector: Injector
         get() = injectorOpt ?: FailingInjector
 
-    private fun findInjector(): Injector? = ServiceLoader.load(Injector::class.java).findFirst().orElse(null)
+    private fun findInjector(): Injector? = ServiceLoader.load(Injector::class.java).firstOrNull()
 
     fun forceInit() { injector }
 

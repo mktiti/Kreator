@@ -11,15 +11,9 @@
     </parent>
 
     <artifactId>kreator-sample</artifactId>
-    <version>0.1</version>
+    <version>0.1.1</version>
 
     <dependencies>
-        <dependency>
-            <groupId>hu.mktiti</groupId>
-            <artifactId>kreator-annotation</artifactId>
-            <version>0.1</version>
-        </dependency>
-
         <dependency>
             <groupId>hu.mktiti</groupId>
             <artifactId>kreator-api</artifactId>
@@ -29,7 +23,7 @@
         <dependency>
             <groupId>hu.mktiti</groupId>
             <artifactId>kreator-core</artifactId>
-            <version>0.1</version>
+            <version>0.1.1</version>
         </dependency>
     </dependencies>
 

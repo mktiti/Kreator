@@ -11,12 +11,15 @@
     <properties>
         <kotlin.version>1.2.61</kotlin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <modules>
         <module>kreator-annotation</module>
         <module>kreator-api</module>
         <module>kreator-core</module>
+        <module>kreator-property </module>
         <module>kreator-sample</module>
     </modules>
 
