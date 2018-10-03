@@ -7,7 +7,7 @@ import hu.mktiti.kreator.api.injectOpt
 
 object PropertiesStore {
 
-    // Possible values: env-var, sys-props, file-props [+ self defined PropertiesSource tags]
+    // Possible values: env-var, sys-props, file-props, structured-file [+ self defined PropertiesSource tags]
     private const val PROPERTIES_SOURCE_TAG_ENV_KEY = "KREATOR_PROPS_SOURCE"
 
     private val source: PropertiesSource

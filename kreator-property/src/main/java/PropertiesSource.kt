@@ -5,12 +5,14 @@ import hu.mktiti.kreator.annotation.InjectableType
 import java.io.FileInputStream
 import java.util.*
 
-private val PROPS_PART_SEPARATORS = listOf(".", "_", "-", ":")
+private val PROPS_PART_SEPARATORS = listOf(".", "_")
 
 private const val PROPS_PREFIX_ENV_KEY = "KREATOR_PROPS_PREFIX"
-private const val PROPS_FILE_ENV_KEY = "KREATOR_PROPS_FILE"
+internal const val PROPS_FILE_ENV_KEY = "KREATOR_PROPS_FILE"
 private const val PROPS_DEFAULT_PREFIX = "kreator-props."
-private const val PROPS_DEFAULT_PREFIX_ENV = "KREATOR_PROPS_"
+private const val PROPS_DEFAULT_PREFIX_ENV = ""
+
+class PropertyConfigException(message: String) : RuntimeException(message)
 
 @InjectableType
 interface PropertiesSource {
@@ -29,7 +31,7 @@ object EmptySource : PropertiesSource {
     override fun safeProperty(key: String): String? = null
 }
 
-abstract class MapPropertiesSource(
+abstract class RadixPropertiesSource(
         private val prefix: String = System.getenv(PROPS_PREFIX_ENV_KEY) ?: PROPS_DEFAULT_PREFIX
 ) : PropertiesSource {
 
@@ -53,7 +55,7 @@ abstract class MapPropertiesSource(
 @Injectable(tags = ["env-var"], default = true)
 class EnvVarPropertiesSource(
         prefix: String = System.getenv(PROPS_PREFIX_ENV_KEY) ?: PROPS_DEFAULT_PREFIX_ENV
-) : MapPropertiesSource(prefix) {
+) : RadixPropertiesSource(prefix) {
 
     override fun loadPropData(): Map<String, String> = System.getenv()
 
@@ -72,7 +74,7 @@ private fun Properties.toSafeMap(): Map<String, String> {
 @Injectable(tags = ["sys-props"])
 class SystemPropertiesSource(
         prefix: String = System.getenv(PROPS_PREFIX_ENV_KEY) ?: PROPS_DEFAULT_PREFIX
-) : MapPropertiesSource(prefix) {
+) : RadixPropertiesSource(prefix) {
 
     override fun loadPropData(): Map<String, String> = System.getProperties().toSafeMap()
 
@@ -82,7 +84,7 @@ class SystemPropertiesSource(
 class PropertiesFileSource(
         prefix: String = System.getenv(PROPS_PREFIX_ENV_KEY) ?: PROPS_DEFAULT_PREFIX,
         private val filePath: String = System.getenv(PROPS_FILE_ENV_KEY)
-) : MapPropertiesSource(prefix) {
+) : RadixPropertiesSource(prefix) {
 
     override fun loadPropData(): Map<String, String> =
         FileInputStream(filePath).use { fis ->
