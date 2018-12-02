@@ -31,7 +31,7 @@ private data class ScanResult(
         val autostartSingletons: List<Supplier<*>>
 )
 
-private const val ENVIRONMENT_VAR = "kreator-env"
+private const val ENVIRONMENT_VAR = "KREATOR_ENV"
 
 class MainInjector : Injector {
 
