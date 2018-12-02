@@ -13,7 +13,15 @@ object PropertiesStore {
     private val source: PropertiesSource
 
     init {
-        source = injectOpt(tag = System.getenv(PROPERTIES_SOURCE_TAG_ENV_KEY)) ?: EmptySource
+        val propertySource = System.getenv(PROPERTIES_SOURCE_TAG_ENV_KEY)
+        source = when (propertySource.toLowerCase()) {
+            "" -> EmptySource
+            "env-var" -> EnvVarPropertiesSource()
+            "sys-props" -> SystemPropertiesSource()
+            "file-props" -> PropertiesFileSource()
+            "structured-file" -> StructuredFileSource()
+            else -> injectOpt(tag = propertySource) ?: EmptySource
+        }
     }
 
     operator fun get(name: String): String? = source.safeProperty(name)

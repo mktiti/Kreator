@@ -56,10 +56,10 @@ fun splitNamedBlock(content: String): Pair<String, String?> {
 }
 
 fun parseProperty(line: String): Pair<String, String>? {
-    val split = line.split(":").filter(String::isNotBlank)
+    val split = line.split(":").filter(String::isNotBlank).map(String::trim)
     return when (split.size) {
-        2 -> split[0].trim().toLowerCase() to split[1].trim()
-        else -> null
+        0, 1 -> null
+        else -> split[0].toLowerCase() to split.drop(1).joinToString(separator = ":")
     }
 }
 
