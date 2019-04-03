@@ -13,7 +13,7 @@ object PropertiesStore {
     private val source: PropertiesSource
 
     init {
-        val propertySource = System.getenv(PROPERTIES_SOURCE_TAG_ENV_KEY)
+        val propertySource = System.getenv(PROPERTIES_SOURCE_TAG_ENV_KEY) ?: ""
         source = when (propertySource.toLowerCase()) {
             "" -> EmptySource
             "env-var" -> EnvVarPropertiesSource()
