@@ -45,6 +45,7 @@ interface IntGenerator {
     fun getName(): String
 }
 
+@TestInjectable(default = true)
 @Injectable(default = true)
 open class SequentialGenerator : IntGenerator {
     private var count = 0
