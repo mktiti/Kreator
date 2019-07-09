@@ -3,6 +3,8 @@ package hu.mktiti.kreator.property
 import hu.mktiti.kreator.annotation.Injectable
 import hu.mktiti.kreator.annotation.InjectableType
 import java.io.FileInputStream
+import java.time.LocalDateTime
+import java.time.format.DateTimeParseException
 import java.util.*
 
 private val PROPS_PART_SEPARATORS = listOf(".", "_")
@@ -14,14 +16,33 @@ private const val PROPS_DEFAULT_PREFIX_ENV = ""
 
 class PropertyConfigException(message: String) : RuntimeException(message)
 
+private fun splitKey(key: String) =
+        key.split(*PROPS_PART_SEPARATORS.toTypedArray()).map(String::toLowerCase)
+
 @InjectableType
 interface PropertiesSource {
 
     fun safeProperty(parts: List<String>): String?
 
-    fun safeProperty(key: String): String? = safeProperty(
-            key.split(*PROPS_PART_SEPARATORS.toTypedArray()).map(String::toLowerCase)
-    )
+    fun safeProperty(key: String): String? = safeProperty(splitKey(key))
+
+    fun safeIntProperty(parts: List<String>): Int? = safeProperty(parts)?.toIntOrNull()
+
+    fun safeIntProperty(key: String): Int? = safeIntProperty(splitKey(key))
+
+    fun safeBoolProperty(parts: List<String>): Boolean? = safeProperty(parts)?.toBoolean()
+
+    fun safeBoolProperty(key: String): Boolean? = safeBoolProperty(splitKey(key))
+
+    fun safeDateProperty(parts: List<String>): LocalDateTime? = safeProperty(parts)?.let {
+        try {
+            LocalDateTime.parse(it)
+        } catch (dfe: DateTimeParseException) {
+            null
+        }
+    }
+
+    fun safeDateProperty(key: String): LocalDateTime? = safeDateProperty(splitKey(key))
 
 }
 

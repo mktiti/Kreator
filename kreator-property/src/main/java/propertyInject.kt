@@ -4,10 +4,11 @@ import hu.mktiti.kreator.annotation.InjectionException
 import hu.mktiti.kreator.api.inject
 import hu.mktiti.kreator.api.injectAny
 import hu.mktiti.kreator.api.injectOpt
+import java.time.LocalDateTime
 
 object PropertiesStore {
 
-    // Possible values: env-var, sys-props, file-props, structured-file [+ self defined PropertiesSource tags]
+    // Possible values: env-var, sys-props, file-props, toml, structured-file [+ self defined PropertiesSource tags]
     private const val PROPERTIES_SOURCE_TAG_ENV_KEY = "KREATOR_PROPS_SOURCE"
 
     private val source: PropertiesSource
@@ -19,12 +20,19 @@ object PropertiesStore {
             "env-var" -> EnvVarPropertiesSource()
             "sys-props" -> SystemPropertiesSource()
             "file-props" -> PropertiesFileSource()
+            "toml" -> TomlSource()
             "structured-file" -> StructuredFileSource()
             else -> injectOpt(tag = propertySource) ?: EmptySource
         }
     }
 
     operator fun get(name: String): String? = source.safeProperty(name)
+
+    fun getInt(name: String): Int? = source.safeIntProperty(name)
+
+    fun getBool(name: String): Boolean? = source.safeBoolProperty(name)
+
+    fun getDate(name: String): LocalDateTime? = source.safeDateProperty(name)
 
 }
 
@@ -44,13 +52,19 @@ fun property(name: String, default: String? = null): String =
         propertyOpt(name, default) ?: throw InjectionException(name)
 
 fun intPropertyOpt(name: String, default: Int? = null): Int? =
-        propertyOpt(name, null)?.toInt() ?: default
+        PropertiesStore.getInt(name) ?: default
 
 fun intProperty(name: String, default: Int? = null): Int =
         intPropertyOpt(name, default) ?: throw InjectionException(name)
 
 fun boolPropertyOpt(name: String, default: Boolean? = null): Boolean? =
-        propertyOpt(name, null)?.toBoolean() ?: default
+        PropertiesStore.getBool(name) ?: default
 
 fun boolProperty(name: String, default: Boolean? = null): Boolean =
         boolPropertyOpt(name, default) ?: throw InjectionException(name)
+
+fun datePropertyOpt(name: String, default: LocalDateTime? = null): LocalDateTime? =
+        PropertiesStore.getDate(name) ?: default
+
+fun dateProperty(name: String, default: LocalDateTime? = null): LocalDateTime =
+        datePropertyOpt(name, default) ?: throw InjectionException(name)
